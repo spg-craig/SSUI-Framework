@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SSUI Framework Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="tokens.css" id="ss-theme-dark" />
+  <link rel="stylesheet" href="tokens.light.css" id="ss-theme-light" disabled />
+  <link rel="stylesheet" href="components.css" />
+</head>
+<body class="ss-ui">
+
+<header class="ss-header">
+  <div class="ss-brand">MSP<span class="plus">+</span></div>
+  <nav class="ss-nav">
+    <div class="ss-nav-group">
+      <button class="ss-nav-label is-active" type="button" data-ss-nav-toggle aria-expanded="false">Solutions <span class="ss-nav-caret">▾</span></button>
+      <div class="ss-nav-sub">
+        <a href="#">CRM Sync</a>
+        <a href="#">Data Mapping</a>
+        <a href="#">Automation</a>
+      </div>
+    </div>
+    <div class="ss-nav-group">
+      <button class="ss-nav-label" type="button" data-ss-nav-toggle aria-expanded="false">SSUI Framework <span class="ss-nav-caret">▾</span></button>
+      <div class="ss-nav-sub">
+        <a href="#">Components</a>
+        <a href="#">Design Tokens</a>
+        <a href="#">Accessibility</a>
+      </div>
+    </div>
+    <a href="#">Resources</a>
+    <a href="#">Contact</a>
+  </nav>
+  <div class="ss-cta">
+    <button class="ss-btn ghost" type="button">Sign In</button>
+    <button class="ss-btn primary" type="button">Book a Call</button>
+  </div>
+</header>
+
+<div class="ss-hero">
+  <div class="badge">Integration Flow Overview</div>
+  <h1>How the <span style="color:var(--ss-green)">SSUI framework</span> Connects <span style="color:var(--ss-hs)">HubSpot</span> &amp; <span style="color:var(--ss-cw)">ConnectWise</span></h1>
+  <p>Real-time, bidirectional CRM synchronization — eliminating manual errors and saving your team valuable time.</p>
+</div>
+
+<div class="ss-container">
+  <nav class="ss-breadcrumbs" aria-label="Breadcrumb">
+    <a href="#">Home</a><span class="ss-breadcrumb-sep">/</span>
+    <a href="#">Framework</a><span class="ss-breadcrumb-sep">/</span>
+    <a href="#">Components</a><span class="ss-breadcrumb-sep">/</span>
+    <span class="is-current" aria-current="page">Demo</span>
+  </nav>
+</div>
+
+<div class="ss-actions" style="max-width:1000px;margin:0 auto 1.5rem;padding:0 2rem">
+  <button class="ss-btn primary" type="button" data-ss-modal-open="ss-demo-modal" data-ss-modal-template="ss-demo-modal-template">Open Demo Modal</button>
+  <button class="ss-btn ghost" type="button" id="ss-wait-btn">Secondary Action</button>
+  <button class="ss-btn ghost" type="button" id="ss-confirm-demo-btn">Open Confirm</button>
+  <label class="ss-check-inline"><input type="checkbox" id="ss-fixed-header-toggle" /> Fixed Header</label>
+  <button class="ss-btn ghost" type="button" id="ss-theme-toggle">Switch to Light</button>
+</div>
+
+<div class="ss-flow-toggle">
+  <button id="ss-btn-hs" data-ss-flow="hs" class="active-hs">HubSpot → ConnectWise</button>
+  <button id="ss-btn-cw" data-ss-flow="cw">ConnectWise → HubSpot</button>
+</div>
+
+<div class="ss-legend">
+  <div class="ss-legend-item"><div class="ss-legend-dot hs"></div>HubSpot Action</div>
+  <div class="ss-legend-item"><div class="ss-legend-dot cw"></div>ConnectWise Action</div>
+  <div class="ss-legend-item"><div class="ss-legend-dot sync"></div>SSUI Framework Logic</div>
+  <div class="ss-legend-item"><div class="ss-legend-dot duplex"></div>Bidirectional / Duplex</div>
+</div>
+
+<div class="ss-canvas">
+  <div id="ss-flow-hs" class="ss-flow visible">
+    <div class="ss-spine">
+
+      <div class="ss-divider"><span>Trigger</span></div>
+
+      <div class="ss-node hs">
+        <div class="dot"></div>
+        <div class="ss-card">
+          <div class="ss-label">HubSpot Workflow Trigger</div>
+          <h3>Deal Reaches Predetermined Stage</h3>
+          <p>Workflow sets <strong>Sync to ConnectWise</strong> on the Deal, Company, and Contact.</p>
+        </div>
+      </div>
+
+      <div class="ss-node sync">
+        <div class="dot"></div>
+        <div class="ss-card">
+          <div class="ss-label">SSUI Framework Matching</div>
+          <h3>Search ConnectWise for Existing Company</h3>
+          <p>Match criteria:</p>
+          <div class="ss-pills">
+            <span class="ss-pill green">Company Name</span>
+            <span class="ss-pill green">Domain</span>
+            <span class="ss-pill green">Address</span>
+          </div>
+          <div class="ss-branch">
+            <div class="ss-branch-option">
+              <span class="tag ss-tag-match">✓ Match Found</span>
+              Records are linked and merged.
+            </div>
+            <div class="ss-branch-option">
+              <span class="tag ss-tag-no-match">✗ No Match</span>
+              A new company is created.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ss-divider"><span>Ongoing Sync</span></div>
+
+      <div class="ss-node duplex">
+        <div class="dot"></div>
+        <div class="ss-card">
+          <div class="ss-label">Bidirectional Sync</div>
+          <h3>Activities &amp; Notes</h3>
+          <p>Notes, tasks, emails, meetings and calls sync with duplex rules.</p>
+          <div class="ss-pills">
+            <span class="ss-pill purple">Notes</span>
+            <span class="ss-pill purple">Emails</span>
+            <span class="ss-pill purple">Tasks</span>
+            <span class="ss-pill purple">Meetings</span>
+            <span class="ss-pill purple">Calls</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="ss-flow-cw" class="ss-flow">
+    <div class="ss-spine">
+      <div class="ss-divider"><span>Company Sync</span></div>
+      <div class="ss-node cw">
+        <div class="dot"></div>
+        <div class="ss-card">
+          <div class="ss-label">ConnectWise</div>
+          <h3>Approved Companies Sync to HubSpot</h3>
+          <p>Eligible CW companies sync to HubSpot.</p>
+          <div class="ss-pills">
+            <span class="ss-pill blue">Approved Statuses</span>
+            <span class="ss-pill blue">Approved Company Types</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ss-stats">
+  <div class="ss-stats-inner">
+    <div class="ss-stat"><div class="num">65+</div><div class="desc">Synced Field Mappings</div></div>
+    <div class="ss-stat"><div class="num">5</div><div class="desc">Object Types Covered</div></div>
+    <div class="ss-stat"><div class="num purple">14</div><div class="desc">Deal / Opportunity Fields</div></div>
+    <div class="ss-stat"><div class="num blue">7</div><div class="desc">Product &amp; Line Item Fields</div></div>
+  </div>
+</div>
+
+<div class="ss-highlight">
+  <div class="ss-highlight-inner">
+    <div class="icon">💼</div>
+    <div>
+      <h3>Industry-Leading Deal &amp; Opportunity Sync Depth</h3>
+      <p>The SSUI framework maps <strong>14 deal-level fields</strong> between HubSpot Deals and ConnectWise Opportunities.</p>
+    </div>
+  </div>
+</div>
+
+<div class="ss-progress is-animated">
+  <div class="ss-progress-card">
+    <div class="ss-progress-head">
+      <div class="ss-progress-title">Sync Progress</div>
+      <div class="ss-progress-meta">Live update</div>
+    </div>
+    <div class="ss-progress-track">
+      <div class="ss-progress-glow"></div>
+      <div class="ss-progress-bar"></div>
+    </div>
+  </div>
+</div>
+
+<div class="ss-progress is-static" id="ss-progress-static" style="--ss-progress:45%">
+  <div class="ss-progress-card">
+    <div class="ss-progress-head">
+      <div class="ss-progress-title">Sync Progress (Server)</div>
+      <div class="ss-progress-meta">45%</div>
+    </div>
+    <div class="ss-progress-track">
+      <div class="ss-progress-glow"></div>
+      <div class="ss-progress-bar"></div>
+    </div>
+  </div>
+</div>
+
+<div class="ss-progress">
+  <div class="ss-progress-card">
+    <div class="ss-progress-head">
+      <div class="ss-progress-title">Waiting for Response</div>
+      <div class="ss-progress-meta">
+        <span class="ss-wait">
+          <span class="ss-wait-dots">
+            <span class="ss-wait-dot"></span>
+            <span class="ss-wait-dot"></span>
+            <span class="ss-wait-dot"></span>
+            <span class="ss-wait-dot"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <div class="ss-progress-track">
+      <div class="ss-progress-glow"></div>
+      <div class="ss-progress-bar"></div>
+    </div>
+  </div>
+</div>
+
+<section class="ss-section">
+  <div class="ss-container ss-stack" style="--ss-stack-gap:1rem">
+    <div class="ss-section-title">
+      <h2>Phase 1 Components</h2>
+      <p>Alerts, toasts, empty states, skeleton loading, and layout primitives.</p>
+    </div>
+
+    <div id="ss-demo-alert" class="ss-alert is-info" role="status">
+      <div class="ss-alert-title">System Notice</div>
+      <div class="ss-alert-text">The SSUI framework now includes reusable feedback and loading patterns.</div>
+      <button type="button" class="ss-alert-close" data-ss-alert-close aria-label="Dismiss">×</button>
+    </div>
+
+    <div class="ss-cluster">
+      <button class="ss-btn ghost" type="button" id="ss-alert-info-btn">Info Alert</button>
+      <button class="ss-btn ghost" type="button" id="ss-alert-success-btn">Success Alert</button>
+      <button class="ss-btn ghost" type="button" id="ss-alert-warn-btn">Warning Alert</button>
+      <button class="ss-btn ghost" type="button" id="ss-alert-error-btn">Error Alert</button>
+      <button class="ss-btn primary" type="button" id="ss-toast-btn">Show Toast</button>
+      <button class="ss-btn ghost" type="button" id="ss-clear-toast-btn">Clear Toasts</button>
+    </div>
+    <div class="ss-help">Keyboard: use Tab for focus rings and press Escape to dismiss the latest toast.</div>
+
+    <div class="ss-grid ss-grid-3">
+      <div class="ss-surface-card ss-stack" style="--ss-stack-gap:.75rem" id="ss-empty-demo">
+        <h3>Empty State</h3>
+        <div class="ss-empty" data-ss-empty>
+          <div class="ss-empty-icon">📭</div>
+          <div class="ss-empty-title">No Integrations Yet</div>
+          <div class="ss-empty-text">Connect a source system to begin syncing records with SSUI components.</div>
+        </div>
+        <ul class="ss-stack" style="--ss-stack-gap:.5rem;display:none;padding-left:1rem;margin:0" data-ss-items>
+          <li>HubSpot <span class="ss-status-pill is-ok">Connected</span></li>
+          <li>ConnectWise <span class="ss-status-pill is-ok">Connected</span></li>
+        </ul>
+        <button class="ss-btn ghost" type="button" id="ss-empty-toggle-btn">Toggle Empty/Data</button>
+      </div>
+
+      <div class="ss-surface-card ss-stack" style="--ss-stack-gap:.75rem">
+        <h3>Skeleton Loading</h3>
+        <div class="ss-skeleton-wrap ss-stack" style="--ss-stack-gap:.55rem" id="ss-skeleton-demo" data-ss-loading="true">
+          <div class="ss-skeleton line lg"></div>
+          <div class="ss-skeleton line"></div>
+          <div class="ss-skeleton line sm"></div>
+          <div class="ss-skeleton block"></div>
+          <div data-ss-loaded class="ss-stack" style="--ss-stack-gap:.45rem">
+            <div><strong>Latest Sync Batch</strong></div>
+            <div class="ss-help">134 records processed with no validation errors.</div>
+            <div class="ss-help">Updated 2 minutes ago.</div>
+          </div>
+        </div>
+        <button class="ss-btn ghost" type="button" id="ss-skeleton-toggle-btn">Toggle Loading</button>
+      </div>
+
+      <div class="ss-surface-card ss-stack" style="--ss-stack-gap:.75rem">
+        <h3>Layout Primitives</h3>
+        <div class="ss-stack" style="--ss-stack-gap:.55rem">
+          <div class="ss-help"><strong>Stack:</strong> vertical spacing rhythm.</div>
+          <div class="ss-cluster">
+            <span class="ss-status-pill is-ok">Cluster</span>
+            <span class="ss-status-pill is-warn">Wrap</span>
+            <span class="ss-status-pill is-danger">Align</span>
+          </div>
+          <div class="ss-grid ss-grid-2" style="--ss-grid-gap:.55rem">
+            <div class="ss-empty" style="padding:.6rem;border-style:solid">Grid Item A</div>
+            <div class="ss-empty" style="padding:.6rem;border-style:solid">Grid Item B</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ss-tabs">
+  <div class="ss-tabs-header">
+    <h2>Complete Field Mapping Reference</h2>
+    <p>Every field the SSUI framework keeps in sync between HubSpot and ConnectWise.</p>
+  </div>
+
+  <div class="ss-tab-bar">
+    <button class="active" data-ss-tab="company">Company <span class="count">2</span></button>
+    <button data-ss-tab="contact">Contact <span class="count">2</span></button>
+  </div>
+
+  <div id="ss-tab-company" class="ss-tab-panel active">
+    <table class="ss-table">
+      <caption class="ss-visually-hidden">Company field mappings between HubSpot and ConnectWise</caption>
+      <thead><tr><th scope="col">HubSpot Field</th><th scope="col">↔</th><th scope="col">ConnectWise Field</th><th scope="col">Source of Truth</th></tr></thead>
+      <tbody>
+        <tr><td>name</td><td></td><td>name</td><td><span class="sot cw">CW</span></td></tr>
+        <tr><td>domain</td><td></td><td>website</td><td><span class="sot cw">CW</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="ss-tab-contact" class="ss-tab-panel">
+    <table class="ss-table">
+      <caption class="ss-visually-hidden">Contact field mappings between HubSpot and ConnectWise</caption>
+      <thead><tr><th scope="col">HubSpot Field</th><th scope="col">↔</th><th scope="col">ConnectWise Field</th><th scope="col">Source of Truth</th></tr></thead>
+      <tbody>
+        <tr><td>firstname</td><td></td><td>firstName</td><td><span class="sot cw">CW</span></td></tr>
+        <tr><td>lastname</td><td></td><td>lastName</td><td><span class="sot cw">CW</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<section class="ss-section">
+  <div class="ss-container">
+    <div class="ss-surface-card">
+      <div class="ss-section-title">
+        <h2>Accordion</h2>
+        <p>Single-open disclosure pattern for FAQs and settings sections.</p>
+      </div>
+      <div class="ss-accordion" data-ss-accordion="single">
+        <div class="ss-accordion-item is-open">
+          <button class="ss-accordion-trigger" type="button" data-ss-accordion-trigger>
+            What is SSUI framework?
+            <span class="ss-accordion-caret">▾</span>
+          </button>
+          <div class="ss-accordion-panel" data-ss-accordion-panel>
+            SSUI is a reusable CSS/JS component framework for integration-oriented UI workflows.
+          </div>
+        </div>
+        <div class="ss-accordion-item">
+          <button class="ss-accordion-trigger" type="button" data-ss-accordion-trigger>
+            Does it support accessibility?
+            <span class="ss-accordion-caret">▾</span>
+          </button>
+          <div class="ss-accordion-panel" data-ss-accordion-panel>
+            Yes. Components include keyboard handling, focus-visible styles, ARIA states, and reduced-motion support.
+          </div>
+        </div>
+        <div class="ss-accordion-item">
+          <button class="ss-accordion-trigger" type="button" data-ss-accordion-trigger>
+            Can I theme it for light mode?
+            <span class="ss-accordion-caret">▾</span>
+          </button>
+          <div class="ss-accordion-panel" data-ss-accordion-panel>
+            Yes. Use the token files and the runtime `SSUI.setTheme()` helper to switch between dark and light.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ss-tabs" data-ss-data-table>
+  <div class="ss-tabs-header">
+    <h2>Scrollable Table (Fixed Header)</h2>
+    <p>Click headers to sort columns.</p>
+  </div>
+  <div class="ss-table-wrap">
+    <table class="ss-table-fixed">
+      <caption class="ss-visually-hidden">Sortable field ownership table</caption>
+      <thead>
+        <tr>
+          <th scope="col" data-ss-sort="text">Field</th>
+          <th scope="col" data-ss-sort="text">System</th>
+          <th scope="col" data-ss-sort="number">Count</th>
+          <th scope="col" data-ss-sort="text">Owner</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-ss-row data-ss-row-action="modal" data-ss-row-value="ss-demo-modal"><td>Company Name</td><td>HubSpot</td><td>12</td><td>Alex</td></tr>
+        <tr data-ss-row data-ss-row-action="navigate" data-ss-row-value="/"><td>Address</td><td>ConnectWise</td><td>5</td><td>Jamie</td></tr>
+        <tr data-ss-row data-ss-row-action="custom" data-ss-row-value="industry"><td>Industry</td><td>HubSpot</td><td>18</td><td>Jordan</td></tr>
+        <tr data-ss-row data-ss-row-action="custom" data-ss-row-value="status"><td>Status</td><td>ConnectWise</td><td>3</td><td>Taylor</td></tr>
+        <tr data-ss-row data-ss-row-action="custom" data-ss-row-value="owner"><td>Owner</td><td>HubSpot</td><td>9</td><td>Chris</td></tr>
+        <tr data-ss-row data-ss-row-action="custom" data-ss-row-value="region"><td>Region</td><td>ConnectWise</td><td>22</td><td>Riley</td></tr>
+        <tr data-ss-row data-ss-row-action="custom" data-ss-row-value="segment"><td>Segment</td><td>HubSpot</td><td>7</td><td>Casey</td></tr>
+        <tr data-ss-row data-ss-row-action="custom" data-ss-row-value="phone"><td>Phone</td><td>ConnectWise</td><td>14</td><td>Sam</td></tr>
+        <tr data-ss-row data-ss-row-action="custom" data-ss-row-value="website"><td>Website</td><td>HubSpot</td><td>4</td><td>Devon</td></tr>
+        <tr data-ss-row data-ss-row-action="custom" data-ss-row-value="territory"><td>Territory</td><td>ConnectWise</td><td>11</td><td>Drew</td></tr>
+        <tr data-ss-row data-ss-row-action="custom" data-ss-row-value="employees"><td>Employees</td><td>HubSpot</td><td>27</td><td>Quinn</td></tr>
+        <tr data-ss-row data-ss-row-action="custom" data-ss-row-value="revenue"><td>Revenue</td><td>ConnectWise</td><td>2</td><td>Parker</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ss-data-table-actions" style="padding-top:.75rem">
+    <button class="ss-btn ghost" type="button" data-ss-page-prev aria-label="Previous page">&#8249;</button>
+    <button class="ss-btn ghost" type="button" data-ss-page-next aria-label="Next page">&#8250;</button>
+    <select class="ss-select" data-ss-page-size style="max-width:120px">
+      <option value="20" selected>20 / page</option>
+      <option value="50">50 / page</option>
+      <option value="100">100 / page</option>
+      <option value="200">200 / page</option>
+      <option value="500">500 / page</option>
+    </select>
+    <span class="ss-help" data-ss-page-info>Page 1/1</span>
+  </div>
+</div>
+
+<form class="ss-form" data-ss-form data-ss-endpoint="/api/demo">
+  <div class="ss-form-card">
+    <div class="ss-form-head">
+      <h3>Request a Sync Assessment</h3>
+      <p>Share a few details and we’ll map the best integration path for your stack.</p>
+    </div>
+    <div class="ss-form-grid">
+      <div class="ss-field">
+        <label class="ss-label" for="ss-name">Full Name<span class="ss-required">*</span></label>
+        <input class="ss-input" id="ss-name" name="full_name" type="text" placeholder="Jane Doe" data-ss-required />
+      </div>
+      <div class="ss-field">
+        <label class="ss-label" for="ss-email">Work Email<span class="ss-required">*</span></label>
+        <input class="ss-input" id="ss-email" name="email" type="email" placeholder="jane@company.com" data-ss-required data-ss-validate="email" />
+      </div>
+      <div class="ss-field">
+        <label class="ss-label" for="ss-company">Company</label>
+        <input class="ss-input" id="ss-company" name="company" type="text" placeholder="MSP+ Partners" />
+      </div>
+      <div class="ss-field">
+        <label class="ss-label" for="ss-system">Primary CRM<span class="ss-required">*</span></label>
+        <select class="ss-select" id="ss-system" name="primary_crm" data-ss-required>
+          <option>HubSpot</option>
+          <option>ConnectWise</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="ss-field" style="grid-column:1/-1">
+        <label class="ss-label">Integration Type</label>
+        <div class="ss-radio-group">
+          <label class="ss-radio"><input type="radio" name="integration" checked /> One-way</label>
+          <label class="ss-radio"><input type="radio" name="integration" /> Duplex</label>
+          <label class="ss-radio"><input type="radio" name="integration" /> Custom</label>
+        </div>
+      </div>
+      <div class="ss-field" style="grid-column:1/-1">
+        <label class="ss-label" for="ss-selected-objects">Objects to Sync<span class="ss-required">*</span></label>
+        <div class="ss-transfer" data-ss-transfer id="ss-sync-transfer">
+          <div class="ss-transfer-col">
+            <div class="ss-transfer-label">Available</div>
+            <input class="ss-input ss-transfer-search" type="search" data-ss-transfer-filter="source" placeholder="Search available..." aria-label="Search available items" />
+            <select class="ss-transfer-list" data-ss-transfer-source aria-label="Available sync objects" multiple size="8">
+              <option value="companies">Companies</option>
+              <option value="contacts">Contacts</option>
+              <option value="deals">Deals</option>
+              <option value="opportunities">Opportunities</option>
+              <option value="products">Products</option>
+              <option value="line_items">Line Items</option>
+              <option value="activities">Activities</option>
+              <option value="notes">Notes</option>
+            </select>
+          </div>
+          <div class="ss-transfer-actions" aria-label="Move options between lists">
+            <button class="ss-transfer-btn" type="button" data-ss-transfer-action="add" aria-label="Add selected">→</button>
+            <button class="ss-transfer-btn" type="button" data-ss-transfer-action="add-all" aria-label="Add all">⇉</button>
+            <button class="ss-transfer-btn" type="button" data-ss-transfer-action="remove" aria-label="Remove selected">←</button>
+            <button class="ss-transfer-btn" type="button" data-ss-transfer-action="remove-all" aria-label="Remove all">⇇</button>
+          </div>
+          <div class="ss-transfer-col">
+            <div class="ss-transfer-label">Selected</div>
+            <input class="ss-input ss-transfer-search" type="search" data-ss-transfer-filter="selected" placeholder="Search selected..." aria-label="Search selected items" />
+            <select class="ss-transfer-list" id="ss-selected-objects" name="sync_objects" data-ss-transfer-selected data-ss-required aria-label="Selected sync objects" multiple size="8"></select>
+            <div class="ss-transfer-meta" data-ss-transfer-count>0 selected</div>
+          </div>
+        </div>
+        <div class="ss-help">Choose one or more objects. Only selected items are submitted.</div>
+      </div>
+      <div class="ss-field" style="grid-column:1/-1">
+        <label class="ss-label">Attach Example File</label>
+        <label class="ss-upload">
+          <span class="ss-upload-drop">
+            <span class="ss-upload-text"><strong>Drag &amp; drop</strong> a file here or <strong>choose file</strong></span>
+          </span>
+          <span class="ss-upload-meta">PDF, CSV, or DOCX · Up to 10MB</span>
+          <input class="ss-upload-input" type="file" name="attachment" />
+        </label>
+      </div>
+      <div class="ss-field" style="grid-column:1/-1">
+        <label class="ss-label" for="ss-notes">Notes</label>
+        <textarea class="ss-textarea" id="ss-notes" name="notes" placeholder="Anything we should know before the call?"></textarea>
+        <div class="ss-help">We respond within one business day.</div>
+      </div>
+      <div class="ss-field" style="grid-column:1/-1">
+        <label class="ss-check" for="ss-consent">
+          <input id="ss-consent" name="consent" type="checkbox" data-ss-required />
+          <span class="ss-help">I agree to be contacted about this request.</span>
+        </label>
+      </div>
+    </div>
+    <div class="ss-actions">
+      <button class="ss-btn primary" type="submit" id="ss-submit-btn">Submit Request</button>
+      <button class="ss-btn ghost" type="button">Download Overview</button>
+    </div>
+  </div>
+</form>
+
+<section class="ss-section">
+  <div class="ss-container ss-stack" style="--ss-stack-gap:1rem">
+    <div class="ss-section-title">
+      <h2>Phase 2: Drawer, Popover, Tooltip</h2>
+      <p>Overlay utilities for secondary actions and contextual UI.</p>
+    </div>
+    <div class="ss-cluster">
+      <button class="ss-btn primary" type="button" data-ss-drawer-open="ss-demo-drawer">Open Drawer</button>
+      <div class="ss-popover-wrap">
+        <button class="ss-btn ghost" type="button" data-ss-popover-toggle="ss-demo-popover" aria-expanded="false">Toggle Popover</button>
+        <div class="ss-popover" id="ss-demo-popover">
+          <div class="ss-stack" style="--ss-stack-gap:.4rem">
+            <strong>Quick Actions</strong>
+            <button class="ss-btn ghost" type="button" style="justify-content:flex-start">Export</button>
+            <button class="ss-btn ghost" type="button" style="justify-content:flex-start">Duplicate</button>
+          </div>
+        </div>
+      </div>
+      <span class="ss-tooltip" data-ss-tooltip="Sync starts every 15 minutes">
+        <button class="ss-btn ghost" type="button">Tooltip Target</button>
+      </span>
+    </div>
+  </div>
+</section>
+
+<section class="ss-section">
+  <div class="ss-container ss-stack" style="--ss-stack-gap:1rem">
+    <div class="ss-section-title">
+      <h2>Phase 3: Date/Time + Combobox</h2>
+      <p>Input primitives for scheduling and tag-style selection.</p>
+    </div>
+    <div class="ss-surface-card ss-stack" style="--ss-stack-gap:.9rem">
+      <div class="ss-date-row">
+        <div class="ss-field">
+          <label class="ss-label" for="ss-date">Date</label>
+          <input class="ss-input" id="ss-date" type="date" />
+        </div>
+        <div class="ss-field">
+          <label class="ss-label" for="ss-time">Time</label>
+          <input class="ss-input" id="ss-time" type="time" />
+        </div>
+        <div class="ss-field">
+          <label class="ss-label" for="ss-timezone">Timezone</label>
+          <select class="ss-select" id="ss-timezone">
+            <option>America/New_York</option>
+            <option>America/Chicago</option>
+            <option>America/Los_Angeles</option>
+          </select>
+        </div>
+      </div>
+      <div class="ss-combobox" data-ss-combobox data-ss-combobox-name="tags" data-ss-combobox-options="HubSpot,ConnectWise,Salesforce,Dynamics,Zoho,Pipedrive,NetSuite,QuickBooks">
+        <label class="ss-label" for="ss-tags-input">Integration Tags</label>
+        <input class="ss-input" id="ss-tags-input" data-ss-combobox-input placeholder="Type and press Enter to add..." />
+        <div class="ss-combobox-tags" data-ss-combobox-tags></div>
+        <div class="ss-combobox-list" data-ss-combobox-list></div>
+        <div data-ss-combobox-hidden></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ss-section">
+  <div class="ss-container ss-stack" style="--ss-stack-gap:1rem">
+    <div class="ss-section-title">
+      <h2>Phase 4: Data Table</h2>
+      <p>Search, column visibility, bulk select, and pagination.</p>
+    </div>
+    <div class="ss-surface-card ss-stack" style="--ss-stack-gap:.8rem" data-ss-data-table>
+      <div class="ss-data-table-tools">
+        <input class="ss-input" data-ss-data-table-search placeholder="Search table..." style="max-width:280px" />
+        <div class="ss-col-toggles">
+          <label class="ss-check-inline"><input type="checkbox" data-ss-col-toggle="system" checked /> System</label>
+          <label class="ss-check-inline"><input type="checkbox" data-ss-col-toggle="status" checked /> Status</label>
+          <label class="ss-check-inline"><input type="checkbox" data-ss-col-toggle="owner" checked /> Owner</label>
+        </div>
+      </div>
+      <div class="ss-data-table-bulk">
+        <span class="ss-help" data-ss-bulk-count>0 selected</span>
+        <select class="ss-select" data-ss-bulk-action style="max-width:200px">
+          <option value="">Bulk action...</option>
+          <option value="activate">Set Active</option>
+          <option value="review">Mark for Review</option>
+          <option value="delete">Delete Rows</option>
+        </select>
+        <button class="ss-btn primary" type="button" data-ss-bulk-apply disabled>Apply to Selected</button>
+      </div>
+      <div class="ss-table-wrap" style="border-radius:10px">
+        <table class="ss-table-fixed">
+          <thead>
+            <tr>
+              <th scope="col"><input type="checkbox" data-ss-select-all aria-label="Select all rows" /></th>
+              <th scope="col" data-ss-sort="text">Field</th>
+              <th scope="col" data-ss-col="system" data-ss-sort="text">System</th>
+              <th scope="col" data-ss-col="status" data-ss-sort="text">Status</th>
+              <th scope="col" data-ss-col="owner" data-ss-sort="text">Owner</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-ss-row-id="company-name"><td><input type="checkbox" data-ss-row-select /></td><td>Company Name</td><td data-ss-col="system">HubSpot</td><td data-ss-col="status"><span class="ss-status-pill is-ok">Active</span></td><td data-ss-col="owner">Alex</td><td><div class="ss-row-actions"><button class="ss-icon-btn" type="button" data-ss-row-btn="edit" data-ss-row-id="company-name" aria-label="Edit row">✎</button><button class="ss-icon-btn is-danger" type="button" data-ss-row-btn="delete" data-ss-row-id="company-name" aria-label="Delete row">🗑</button></div></td></tr>
+            <tr data-ss-row-id="domain"><td><input type="checkbox" data-ss-row-select /></td><td>Domain</td><td data-ss-col="system">ConnectWise</td><td data-ss-col="status"><span class="ss-status-pill is-warn">Review</span></td><td data-ss-col="owner">Riley</td><td><div class="ss-row-actions"><button class="ss-icon-btn" type="button" data-ss-row-btn="edit" data-ss-row-id="domain" aria-label="Edit row">✎</button><button class="ss-icon-btn is-danger" type="button" data-ss-row-btn="delete" data-ss-row-id="domain" aria-label="Delete row">🗑</button></div></td></tr>
+            <tr data-ss-row-id="industry"><td><input type="checkbox" data-ss-row-select /></td><td>Industry</td><td data-ss-col="system">HubSpot</td><td data-ss-col="status"><span class="ss-status-pill is-ok">Active</span></td><td data-ss-col="owner">Taylor</td><td><div class="ss-row-actions"><button class="ss-icon-btn" type="button" data-ss-row-btn="edit" data-ss-row-id="industry" aria-label="Edit row">✎</button><button class="ss-icon-btn is-danger" type="button" data-ss-row-btn="delete" data-ss-row-id="industry" aria-label="Delete row">🗑</button></div></td></tr>
+            <tr data-ss-row-id="phone"><td><input type="checkbox" data-ss-row-select /></td><td>Phone</td><td data-ss-col="system">ConnectWise</td><td data-ss-col="status"><span class="ss-status-pill is-danger">Blocked</span></td><td data-ss-col="owner">Jordan</td><td><div class="ss-row-actions"><button class="ss-icon-btn" type="button" data-ss-row-btn="edit" data-ss-row-id="phone" aria-label="Edit row">✎</button><button class="ss-icon-btn is-danger" type="button" data-ss-row-btn="delete" data-ss-row-id="phone" aria-label="Delete row">🗑</button></div></td></tr>
+            <tr data-ss-row-id="revenue"><td><input type="checkbox" data-ss-row-select /></td><td>Revenue</td><td data-ss-col="system">HubSpot</td><td data-ss-col="status"><span class="ss-status-pill is-ok">Active</span></td><td data-ss-col="owner">Casey</td><td><div class="ss-row-actions"><button class="ss-icon-btn" type="button" data-ss-row-btn="edit" data-ss-row-id="revenue" aria-label="Edit row">✎</button><button class="ss-icon-btn is-danger" type="button" data-ss-row-btn="delete" data-ss-row-id="revenue" aria-label="Delete row">🗑</button></div></td></tr>
+            <tr data-ss-row-id="employees"><td><input type="checkbox" data-ss-row-select /></td><td>Employees</td><td data-ss-col="system">ConnectWise</td><td data-ss-col="status"><span class="ss-status-pill is-warn">Review</span></td><td data-ss-col="owner">Sam</td><td><div class="ss-row-actions"><button class="ss-icon-btn" type="button" data-ss-row-btn="edit" data-ss-row-id="employees" aria-label="Edit row">✎</button><button class="ss-icon-btn is-danger" type="button" data-ss-row-btn="delete" data-ss-row-id="employees" aria-label="Delete row">🗑</button></div></td></tr>
+            <tr data-ss-row-id="segment"><td><input type="checkbox" data-ss-row-select /></td><td>Segment</td><td data-ss-col="system">HubSpot</td><td data-ss-col="status"><span class="ss-status-pill is-ok">Active</span></td><td data-ss-col="owner">Devon</td><td><div class="ss-row-actions"><button class="ss-icon-btn" type="button" data-ss-row-btn="edit" data-ss-row-id="segment" aria-label="Edit row">✎</button><button class="ss-icon-btn is-danger" type="button" data-ss-row-btn="delete" data-ss-row-id="segment" aria-label="Delete row">🗑</button></div></td></tr>
+            <tr data-ss-row-id="territory"><td><input type="checkbox" data-ss-row-select /></td><td>Territory</td><td data-ss-col="system">ConnectWise</td><td data-ss-col="status"><span class="ss-status-pill is-ok">Active</span></td><td data-ss-col="owner">Drew</td><td><div class="ss-row-actions"><button class="ss-icon-btn" type="button" data-ss-row-btn="edit" data-ss-row-id="territory" aria-label="Edit row">✎</button><button class="ss-icon-btn is-danger" type="button" data-ss-row-btn="delete" data-ss-row-id="territory" aria-label="Delete row">🗑</button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="ss-data-table-actions">
+        <button class="ss-btn ghost" type="button" data-ss-page-prev aria-label="Previous page">&#8249;</button>
+        <button class="ss-btn ghost" type="button" data-ss-page-next aria-label="Next page">&#8250;</button>
+        <select class="ss-select" data-ss-page-size style="max-width:120px">
+          <option value="20" selected>20 / page</option>
+          <option value="50">50 / page</option>
+          <option value="100">100 / page</option>
+          <option value="200">200 / page</option>
+          <option value="500">500 / page</option>
+        </select>
+        <span class="ss-help" data-ss-page-info>Page 1/1</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ss-section">
+  <div class="ss-container ss-stack" style="--ss-stack-gap:1rem">
+    <div class="ss-section-title">
+      <h2>Phase 5: Stepper / Wizard</h2>
+      <p>Three-step flow with forward/back navigation.</p>
+    </div>
+    <div class="ss-surface-card ss-stepper" data-ss-stepper data-ss-step-index="0">
+      <div class="ss-stepper-dots">
+        <span class="ss-step-dot" data-ss-step-dot>1</span>
+        <span class="ss-step-dot" data-ss-step-dot>2</span>
+        <span class="ss-step-dot" data-ss-step-dot>3</span>
+      </div>
+      <div class="ss-step is-active" data-ss-step>
+        <h3>Step 1: Account</h3>
+        <p class="ss-help">Set your primary integration account details.</p>
+      </div>
+      <div class="ss-step" data-ss-step>
+        <h3>Step 2: Mapping</h3>
+        <p class="ss-help">Select fields and rules to sync between systems.</p>
+      </div>
+      <div class="ss-step" data-ss-step>
+        <h3>Step 3: Confirm</h3>
+        <p class="ss-help">Review settings and launch synchronization.</p>
+      </div>
+      <div class="ss-step-actions">
+        <button class="ss-btn ghost" type="button" data-ss-step-back>Back</button>
+        <button class="ss-btn primary" type="button" data-ss-step-next>Next</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ss-section">
+  <div class="ss-container ss-stack" style="--ss-stack-gap:1rem">
+    <div class="ss-section-title">
+      <h2>Phase 6: Command Palette</h2>
+      <p>Use <strong>Cmd/Ctrl + K</strong> or the button to open quick actions.</p>
+    </div>
+    <div class="ss-cluster">
+      <button class="ss-btn primary" type="button" data-ss-command-open>Open Command Palette</button>
+    </div>
+  </div>
+</section>
+
+<div class="ss-drawer" id="ss-demo-drawer" aria-hidden="true">
+  <div class="ss-drawer-backdrop"></div>
+  <aside class="ss-drawer-panel" role="dialog" aria-modal="true" aria-label="Demo drawer">
+    <div class="ss-drawer-head ss-cluster" style="justify-content:space-between">
+      <strong>Integration Drawer</strong>
+      <button class="ss-modal-close" type="button" data-ss-drawer-close aria-label="Close drawer">×</button>
+    </div>
+    <div class="ss-drawer-body ss-stack" style="--ss-stack-gap:.75rem">
+      <p class="ss-help">Use drawers for focused secondary tasks without leaving the current page.</p>
+      <label class="ss-check-inline"><input type="checkbox" checked /> Enable company sync</label>
+      <label class="ss-check-inline"><input type="checkbox" /> Enable activity duplex</label>
+    </div>
+    <div class="ss-drawer-foot ss-cluster" style="justify-content:flex-end">
+      <button class="ss-btn ghost" type="button" data-ss-drawer-close>Cancel</button>
+      <button class="ss-btn primary" type="button" data-ss-drawer-close>Save</button>
+    </div>
+  </aside>
+</div>
+
+<div class="ss-command" id="ss-command" aria-hidden="true">
+  <div class="ss-command-backdrop"></div>
+  <div class="ss-command-panel">
+    <div class="ss-cluster">
+      <input class="ss-input" data-ss-command-input placeholder="Type a command..." style="flex:1" />
+      <button class="ss-btn ghost" type="button" data-ss-command-close>Close</button>
+    </div>
+    <div class="ss-command-list">
+      <button class="ss-command-item" type="button" data-ss-command-item="Open Connections">Open Connections</button>
+      <button class="ss-command-item" type="button" data-ss-command-item="Run Sync Now">Run Sync Now</button>
+      <button class="ss-command-item" type="button" data-ss-command-item="View Error Logs">View Error Logs</button>
+      <button class="ss-command-item" type="button" data-ss-command-item="Create Mapping">Create Mapping</button>
+    </div>
+  </div>
+</div>
+
+<template id="ss-demo-modal-template">
+  <div class="ss-modal" id="ss-demo-modal" aria-hidden="true">
+    <div class="ss-modal-backdrop" data-ss-modal-close></div>
+    <div class="ss-modal-panel" role="dialog" aria-modal="true" aria-label="SSUI Framework Demo Modal">
+      <div class="ss-modal-head">
+        <div class="ss-modal-title">Modal: All Elements Preview</div>
+        <button class="ss-modal-close" type="button" data-ss-modal-close aria-label="Close">×</button>
+      </div>
+      <div class="ss-modal-body">
+        <div class="ss-progress is-static" style="--ss-progress:72%">
+          <div class="ss-progress-card">
+            <div class="ss-progress-head">
+              <div class="ss-progress-title">Modal Progress</div>
+              <div class="ss-progress-meta">72%</div>
+            </div>
+            <div class="ss-progress-track">
+              <div class="ss-progress-glow"></div>
+              <div class="ss-progress-bar"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ss-highlight">
+          <div class="ss-highlight-inner">
+            <div class="icon">✨</div>
+            <div>
+              <h3>Modal Highlight</h3>
+              <p>Use any of the framework components inside the modal.</p>
+            </div>
+          </div>
+        </div>
+        <div class="ss-form">
+          <div class="ss-form-card">
+            <div class="ss-form-head">
+              <h3>Quick Request</h3>
+              <p>Lightweight example inside a modal.</p>
+            </div>
+            <div class="ss-form-grid">
+              <div class="ss-field">
+                <label class="ss-label" for="ss-modal-name">Name</label>
+                <input class="ss-input" id="ss-modal-name" type="text" placeholder="Alex Smith" />
+              </div>
+              <div class="ss-field">
+                <label class="ss-label" for="ss-modal-email">Email</label>
+                <input class="ss-input" id="ss-modal-email" type="email" placeholder="alex@company.com" />
+              </div>
+              <div class="ss-field" style="grid-column:1/-1">
+                <label class="ss-label" for="ss-modal-notes">Notes</label>
+                <textarea class="ss-textarea" id="ss-modal-notes" placeholder="Tell us more..."></textarea>
+              </div>
+            </div>
+            <div class="ss-actions">
+              <button class="ss-btn primary" type="button">Submit</button>
+              <button class="ss-btn ghost" type="button" data-ss-modal-close>Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<footer class="ss-footer">
+  <div class="ss-brand">MSP<span class="plus">+</span></div>
+  <nav class="ss-nav">
+    <a href="#">About</a>
+    <a href="#">Careers</a>
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+  </nav>
+  <div class="ss-cta">
+    <div class="ss-help">© 2026 MSP+ — All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="components.js"></script>
+<script>
+  // Example of updating from callbacks
+  setTimeout(()=>window.SSUI.setProgress(document.getElementById('ss-progress-static'), 68), 1200);
+  // Example button loading
+  const btn = document.getElementById('ss-submit-btn');
+  const waitBtn = document.getElementById('ss-wait-btn');
+  const alertEl = document.getElementById('ss-demo-alert');
+  const alertInfoBtn = document.getElementById('ss-alert-info-btn');
+  const alertSuccessBtn = document.getElementById('ss-alert-success-btn');
+  const alertWarnBtn = document.getElementById('ss-alert-warn-btn');
+  const alertErrorBtn = document.getElementById('ss-alert-error-btn');
+  const toastBtn = document.getElementById('ss-toast-btn');
+  const clearToastBtn = document.getElementById('ss-clear-toast-btn');
+  const emptyWrap = document.getElementById('ss-empty-demo');
+  const emptyToggleBtn = document.getElementById('ss-empty-toggle-btn');
+  const skeletonWrap = document.getElementById('ss-skeleton-demo');
+  const skeletonToggleBtn = document.getElementById('ss-skeleton-toggle-btn');
+  const transferWrap = document.getElementById('ss-sync-transfer');
+  const headerEl = document.querySelector('.ss-header');
+  const fixedHeaderToggle = document.getElementById('ss-fixed-header-toggle');
+  const themeToggle = document.getElementById('ss-theme-toggle');
+  const confirmDemoBtn = document.getElementById('ss-confirm-demo-btn');
+  if(btn){
+    btn.addEventListener('click', ()=>{
+      window.SSUI.setButtonLoading(btn, true);
+      setTimeout(()=>window.SSUI.setButtonLoading(btn, false), 1800);
+    });
+  }
+  if(waitBtn){
+    waitBtn.addEventListener('click', ()=>{
+      window.SSUI.setButtonLoading(waitBtn, true);
+      setTimeout(()=>window.SSUI.setButtonLoading(waitBtn, false), 1400);
+    });
+  }
+
+  if(alertEl){
+    const setDemoAlert = (type, title, text)=>{
+      window.SSUI.setAlert(alertEl, {type, title, text, visible:true});
+    };
+    if(alertInfoBtn){
+      alertInfoBtn.addEventListener('click', ()=>setDemoAlert('info', 'System Notice', 'Information alert from SSUI feedback components.'));
+    }
+    if(alertSuccessBtn){
+      alertSuccessBtn.addEventListener('click', ()=>setDemoAlert('success', 'Sync Complete', 'All records were processed successfully.'));
+    }
+    if(alertWarnBtn){
+      alertWarnBtn.addEventListener('click', ()=>setDemoAlert('warn', 'Review Required', 'A few records need field mapping review.'));
+    }
+    if(alertErrorBtn){
+      alertErrorBtn.addEventListener('click', ()=>setDemoAlert('error', 'Sync Error', 'Connection failed while posting updates.'));
+    }
+  }
+
+  if(toastBtn){
+    toastBtn.addEventListener('click', ()=>{
+      window.SSUI.showToast({
+        type:'success',
+        title:'Toast Example',
+        text:'SSUI toast API is active and ready for integration events.',
+        duration:3200
+      });
+    });
+  }
+  if(clearToastBtn){
+    clearToastBtn.addEventListener('click', ()=>window.SSUI.clearToasts());
+  }
+
+  if(emptyWrap && emptyToggleBtn){
+    let isEmpty = true;
+    window.SSUI.setEmptyState(emptyWrap, isEmpty);
+    emptyToggleBtn.addEventListener('click', ()=>{
+      isEmpty = !isEmpty;
+      window.SSUI.setEmptyState(emptyWrap, isEmpty);
+    });
+  }
+
+  if(skeletonWrap && skeletonToggleBtn){
+    let loading = skeletonWrap.getAttribute('data-ss-loading') !== 'false';
+    window.SSUI.setSkeletonLoading(skeletonWrap, loading);
+    skeletonToggleBtn.addEventListener('click', ()=>{
+      loading = !loading;
+      window.SSUI.setSkeletonLoading(skeletonWrap, loading);
+    });
+  }
+
+  if(transferWrap){
+    window.SSUI.setTransferValues(transferWrap, ['companies', 'contacts']);
+  }
+
+  if(themeToggle){
+    const updateThemeLabel = ()=>{
+      const current = window.SSUI.getTheme();
+      themeToggle.textContent = current === 'light' ? 'Switch to Dark' : 'Switch to Light';
+    };
+    updateThemeLabel();
+    themeToggle.addEventListener('click', ()=>{
+      const next = window.SSUI.getTheme() === 'light' ? 'dark' : 'light';
+      window.SSUI.setTheme(next);
+      updateThemeLabel();
+    });
+  }
+
+  if(headerEl && fixedHeaderToggle){
+    fixedHeaderToggle.addEventListener('change', ()=>{
+      window.SSUI.setHeaderFixed(headerEl, fixedHeaderToggle.checked);
+    });
+  }
+
+  if(confirmDemoBtn){
+    confirmDemoBtn.addEventListener('click', async ()=>{
+      const accepted = await window.SSUI.confirm({
+        title: 'Continue Sync Run?',
+        message: 'This will trigger a full sync job. Continue or deny?',
+        confirmLabel: 'Continue',
+        cancelLabel: 'Deny',
+        confirmChoice: 'continue',
+        cancelChoice: 'deny'
+      });
+      window.SSUI.showToast({
+        type: accepted ? 'success' : 'warn',
+        title: accepted ? 'Confirmed' : 'Cancelled',
+        text: accepted ? 'User accepted the action.' : 'User denied the action.'
+      });
+    });
+  }
+
+  window.SSUI.onRowAction = function({row, action, value}){
+    if(action === 'custom'){
+      alert('Row action: ' + value);
+    }
+  };
+  window.SSUI.onTableRowAction = function({action, rowId}){
+    window.SSUI.showToast({
+      type: action === 'delete' ? 'warn' : 'info',
+      title: action === 'delete' ? 'Delete Requested' : 'Edit Requested',
+      text: 'Action "' + action + '" for row: ' + (rowId || 'unknown')
+    });
+  };
+  window.SSUI.onTableBulkAction = function({action, rowIds}){
+    window.SSUI.showToast({
+      type: action === 'delete' ? 'warn' : 'success',
+      title: 'Bulk Action Applied',
+      text: action + ' applied to: ' + (rowIds.join(', ') || 'none')
+    });
+  };
+  window.SSUI.onFormSuccess = function(form){
+    const selectedValues = transferWrap ? window.SSUI.getTransferValues(transferWrap) : [];
+    alert('Form submitted successfully (demo). Selected objects: ' + (selectedValues.join(', ') || 'none'));
+  };
+  window.SSUI.onFormError = function(form, err){
+    const selectedValues = transferWrap ? window.SSUI.getTransferValues(transferWrap) : [];
+    alert('Form error: ' + (err?.status || 'unknown') + '. Payload included: ' + (selectedValues.join(', ') || 'none'));
+  };
+</script>
+</body>
+</html>

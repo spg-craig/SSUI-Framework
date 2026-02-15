@@ -1,0 +1,29 @@
+/* SalesSync UI Tokens (light theme) */
+:root{
+  --ss-green:#3BBA7E;
+  --ss-green-dim:rgba(59,186,126,.12);
+  --ss-green-glow:rgba(59,186,126,.25);
+
+  --ss-hs:#FF7A59;
+  --ss-hs-dim:rgba(255,122,89,.1);
+  --ss-cw:#2E8CE6;
+  --ss-cw-dim:rgba(46,140,230,.1);
+  --ss-duplex:#7C5CFA;
+  --ss-duplex-dim:rgba(124,92,250,.12);
+
+  --ss-bg:#F6F8FB;
+  --ss-surface:#FFFFFF;
+  --ss-surface2:#F0F4F8;
+  --ss-surface3:#E9EEF5;
+
+  --ss-text:#0F1E30;
+  --ss-text-dim:#5E7188;
+
+  --ss-border:#DCE4EE;
+  --ss-border-light:#C9D5E4;
+
+  --ss-r-8:8px;
+  --ss-r-10:10px;
+  --ss-r-12:12px;
+  --ss-shadow-1:0 10px 24px rgba(20,40,70,.12);
+}
