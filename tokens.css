@@ -59,4 +59,20 @@
   --ss-success:var(--ss-green);
   --ss-success-bg:var(--ss-green-dim);
   --ss-success-border:rgba(59,186,126,.35);
+
+  /* Neutral status (muted gray) — used for "Inactive", "N/A", placeholder pills. */
+  --ss-neutral:#94a3b8;
+  --ss-neutral-bg:rgba(148,163,184,.1);
+  --ss-neutral-border:rgba(148,163,184,.3);
+
+  /* Category tone palette — non-semantic classification colors. Used by
+     .ss-status-pill / .ss-category-pill variants for module-defined
+     classifications (e.g. agreement Parent/Child/RDR/T&M, member Admin/API). */
+  --ss-tone-purple:#8b5cf6;
+  --ss-tone-purple-bg:rgba(139,92,246,.12);
+  --ss-tone-purple-border:rgba(139,92,246,.35);
+
+  --ss-tone-orange:#ea580c;
+  --ss-tone-orange-bg:rgba(234,88,12,.12);
+  --ss-tone-orange-border:rgba(234,88,12,.35);
 }

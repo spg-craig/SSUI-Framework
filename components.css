@@ -51,11 +51,23 @@ body{margin:0}
 .ss-page-link.is-active{background:var(--ss-green);border-color:var(--ss-green);color:#fff}
 .ss-page-link.is-disabled{opacity:.5;pointer-events:none}
 .ss-page-ellipsis{padding:.35rem .5rem;color:var(--ss-text-dim)}
-.ss-status-pill{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .6rem;border-radius:999px;font-size:.75rem;font-weight:600;border:1px solid transparent}
+.ss-status-pill{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .6rem;border-radius:999px;font-size:.75rem;font-weight:600;border:1px solid transparent;white-space:nowrap}
 .ss-status-pill.is-ok,.ss-status-pill.is-success{color:var(--ss-success);background:var(--ss-success-bg);border-color:var(--ss-success-border)}
-.ss-status-pill.is-warn,.ss-status-pill.is-recommended{color:var(--ss-warn);background:var(--ss-warn-bg);border-color:var(--ss-warn-border)}
+.ss-status-pill.is-warn,.ss-status-pill.is-recommended,.ss-status-pill.is-amber{color:var(--ss-warn);background:var(--ss-warn-bg);border-color:var(--ss-warn-border)}
 .ss-status-pill.is-danger,.ss-status-pill.is-critical{color:var(--ss-critical);background:var(--ss-critical-bg);border-color:var(--ss-critical-border)}
-.ss-status-pill.is-info,.ss-status-pill.is-advisory{color:var(--ss-advisory);background:var(--ss-advisory-bg);border-color:var(--ss-advisory-border)}
+.ss-status-pill.is-info,.ss-status-pill.is-advisory,.ss-status-pill.is-blue{color:var(--ss-info);background:var(--ss-info-bg);border-color:var(--ss-info-border)}
+.ss-status-pill.is-neutral{color:var(--ss-neutral);background:var(--ss-neutral-bg);border-color:var(--ss-neutral-border)}
+.ss-status-pill.is-purple{color:var(--ss-tone-purple);background:var(--ss-tone-purple-bg);border-color:var(--ss-tone-purple-border)}
+.ss-status-pill.is-orange{color:var(--ss-tone-orange);background:var(--ss-tone-orange-bg);border-color:var(--ss-tone-orange-border)}
+.ss-status-pill.is-green{color:var(--ss-success);background:var(--ss-success-bg);border-color:var(--ss-success-border)}
+
+/* Staged pill — pending-change indicator for data table rows. Two variants:
+   .is-update (amber, default) for edits of existing CW records, .is-new
+   (green) for staged creates. Compact by design — meant for inline use
+   next to a row name or in a table cell. */
+.ss-staged-pill{display:inline-flex;align-items:center;padding:.1rem .45rem;border-radius:4px;font-size:.65rem;font-weight:700;line-height:1;border:1px solid transparent;text-transform:uppercase;letter-spacing:.02em}
+.ss-staged-pill.is-update{color:var(--ss-warn);background:var(--ss-warn-bg);border-color:var(--ss-warn-border)}
+.ss-staged-pill.is-new{color:var(--ss-success);background:var(--ss-success-bg);border-color:var(--ss-success-border)}
 
 /* Severity pill — semantic variant of status-pill used for audit results.
    Adds a leading dot indicator. Modifier classes mirror severity tokens. */

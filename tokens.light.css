@@ -47,4 +47,16 @@
   --ss-success:var(--ss-green);
   --ss-success-bg:var(--ss-green-dim);
   --ss-success-border:rgba(59,186,126,.35);
+
+  --ss-neutral:#64748b;
+  --ss-neutral-bg:rgba(100,116,139,.1);
+  --ss-neutral-border:rgba(100,116,139,.3);
+
+  --ss-tone-purple:#7c3aed;
+  --ss-tone-purple-bg:rgba(124,58,237,.12);
+  --ss-tone-purple-border:rgba(124,58,237,.35);
+
+  --ss-tone-orange:#c2410c;
+  --ss-tone-orange-bg:rgba(194,65,12,.12);
+  --ss-tone-orange-border:rgba(194,65,12,.35);
 }
