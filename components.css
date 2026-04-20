@@ -195,8 +195,12 @@ body{margin:0}
 .ss-table tbody tr:last-child,.ss-table-fixed tbody tr:last-child{border-bottom:none}
 .ss-table tbody tr:hover,.ss-table-fixed tbody tr:hover{background:var(--ss-surface2)}
 .ss-table td,.ss-table-fixed td{font-size:.8rem;padding:.55rem 1rem;color:var(--ss-text-dim)}
-.ss-table td:first-child,.ss-table-fixed td:first-child{color:var(--ss-hs);font-weight:600}
-.ss-table td:nth-child(3),.ss-table-fixed td:nth-child(3){color:var(--ss-cw);font-weight:600}
+/* Opt-in positional accents. Historically .ss-table applied colored
+   first/third columns by default, which caused pills and other
+   content in those cells to be repainted by the cascade. Now you
+   must add `.ss-table-legacy-cols` to the table to get that look. */
+.ss-table-legacy-cols td:first-child{color:var(--ss-hs);font-weight:600}
+.ss-table-legacy-cols td:nth-child(3){color:var(--ss-cw);font-weight:600}
 .ss-table td .sot,.ss-table-fixed td .sot{font-size:.63rem;font-weight:700;padding:.15rem .5rem;border-radius:50px;display:inline-block}
 .ss-table td .sot.cw,.ss-table-fixed td .sot.cw{background:var(--ss-cw-dim);color:var(--ss-cw)}
 .ss-table td .sot.duplex,.ss-table-fixed td .sot.duplex{background:var(--ss-duplex-dim);color:var(--ss-duplex)}
