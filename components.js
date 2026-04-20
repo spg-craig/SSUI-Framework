@@ -1,11 +1,21 @@
 // SSUI framework behaviors
 (function(){
   function showTab(name, btn){
-    document.querySelectorAll('.ss-tab-panel').forEach(p=>{
+    // Scope to the parent .ss-tabs container so multiple tab groups
+    // on the same page don't interfere with each other.
+    // Only affect elements owned by THIS scope, not nested .ss-tabs.
+    const activeBtn = btn || document.querySelector(`.ss-tab-bar [data-ss-tab="${name}"]`);
+    const scope = activeBtn ? activeBtn.closest('.ss-tabs') : null;
+    const root = scope || document;
+
+    const ownedPanels = Array.from(root.querySelectorAll('.ss-tab-panel')).filter(p => p.closest('.ss-tabs') === scope);
+    const ownedBtns = Array.from(root.querySelectorAll('.ss-tab-bar button')).filter(b => b.closest('.ss-tabs') === scope);
+
+    ownedPanels.forEach(p=>{
       p.classList.remove('active');
       p.setAttribute('hidden','hidden');
     });
-    document.querySelectorAll('.ss-tab-bar button').forEach(b=>{
+    ownedBtns.forEach(b=>{
       b.classList.remove('active');
       b.setAttribute('aria-selected','false');
       b.setAttribute('tabindex','-1');
@@ -15,7 +25,6 @@
       panel.classList.add('active');
       panel.removeAttribute('hidden');
     }
-    const activeBtn = btn || document.querySelector(`.ss-tab-bar [data-ss-tab="${name}"]`);
     if(activeBtn){
       activeBtn.classList.add('active');
       activeBtn.setAttribute('aria-selected','true');
@@ -347,6 +356,184 @@
     document.querySelectorAll('[data-ss-combobox]').forEach(initCombobox);
   };
 
+  const parseChartBool = (value, fallback)=>{
+    if(value === null || value === undefined || value === '') return fallback;
+    const v = String(value).trim().toLowerCase();
+    if(['1','true','yes','on'].includes(v)) return true;
+    if(['0','false','no','off'].includes(v)) return false;
+    return fallback;
+  };
+
+  const parseChartPoints = (raw)=>{
+    const text = String(raw || '').trim();
+    if(!text){
+      return [
+        {label:'Jan', value:24},
+        {label:'Feb', value:38},
+        {label:'Mar', value:31},
+        {label:'Apr', value:47},
+        {label:'May', value:58},
+        {label:'Jun', value:51}
+      ];
+    }
+    return text.split(',').map(part=>{
+      const pieces = part.split(':');
+      const label = String((pieces[0] || '').trim() || 'Item');
+      const value = Number((pieces[1] || '').trim());
+      return {label, value: Number.isFinite(value) ? value : 0};
+    }).filter(item=>item.label);
+  };
+
+  const getChartColors = (raw, count)=>{
+    const fallback = ['#3bba7e','#2e8ce6','#f59e0b','#f53003','#a78bfa','#22c55e','#06b6d4','#fb7185'];
+    const custom = String(raw || '').split(',').map(s=>s.trim()).filter(Boolean);
+    const palette = custom.length ? custom : fallback;
+    return Array.from({length: Math.max(1, count)}, (_, i)=>palette[i % palette.length]);
+  };
+
+  const escapeChartText = (value)=>String(value ?? '').replace(/[&<>"']/g, c=>({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[c] || c));
+
+  const renderChartLegend = (points, colors, opts)=>{
+    if(!opts.showLegend) return '';
+    const total = points.reduce((sum, p)=>sum + p.value, 0);
+    const items = points.map((point, idx)=>{
+      const pct = total > 0 ? Math.round((point.value / total) * 1000) / 10 : 0;
+      const details = [];
+      if(opts.showValues) details.push(String(point.value));
+      if(opts.showPercent) details.push(`${pct}%`);
+      const suffix = details.length ? ` (${details.join(' · ')})` : '';
+      return `<div class="ss-chart-legend-item"><span class="ss-chart-legend-swatch" style="background:${colors[idx]}"></span><span>${escapeChartText(point.label)}${suffix}</span></div>`;
+    }).join('');
+    return `<div class="ss-chart-legend">${items}</div>`;
+  };
+
+  const renderLineChartSvg = (points, colors, opts)=>{
+    const width = 680;
+    const height = 220;
+    const padX = 44;
+    const padY = 20;
+    const max = Math.max(Number(opts.maxY) || 0, ...points.map(p=>p.value), 1);
+    const graphW = width - padX * 2;
+    const graphH = height - padY * 2;
+    const toX = (idx)=>padX + (points.length <= 1 ? graphW / 2 : (idx / (points.length - 1)) * graphW);
+    const toY = (value)=>padY + (graphH - ((value / max) * graphH));
+    const path = points.map((p, idx)=>`${idx ? 'L' : 'M'} ${toX(idx)} ${toY(p.value)}`).join(' ');
+    const yTicks = 4;
+    const grid = Array.from({length: yTicks + 1}, (_, i)=>{
+      const y = padY + (graphH / yTicks) * i;
+      const val = Math.round((max - ((max / yTicks) * i)) * 10) / 10;
+      return `<line class="ss-chart-gridline" x1="${padX}" y1="${y}" x2="${width - padX}" y2="${y}"></line><text class="ss-chart-label" x="${padX - 8}" y="${y + 3}" text-anchor="end">${val}</text>`;
+    }).join('');
+    const xLabels = points.map((p, idx)=>`<text class="ss-chart-label" x="${toX(idx)}" y="${height - 6}" text-anchor="middle">${escapeChartText(p.label)}</text>`).join('');
+    const values = opts.showValues
+      ? points.map((p, idx)=>`<text class="ss-chart-value" x="${toX(idx)}" y="${toY(p.value) - 8}" text-anchor="middle">${p.value}</text>`).join('')
+      : '';
+    const dots = points.map((p, idx)=>`<circle class="ss-chart-point" cx="${toX(idx)}" cy="${toY(p.value)}" r="4.5" fill="${colors[idx]}"></circle>`).join('');
+    return `<svg class="ss-chart-svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="Line chart"><g>${grid}<line class="ss-chart-axis" x1="${padX}" y1="${height - padY}" x2="${width - padX}" y2="${height - padY}"></line><path class="ss-chart-line" d="${path}" stroke="${colors[0]}"></path>${dots}${values}${xLabels}</g></svg>`;
+  };
+
+  const renderVerticalBarChartSvg = (points, colors, opts)=>{
+    const width = 680;
+    const height = 220;
+    const padX = 44;
+    const padY = 20;
+    const max = Math.max(Number(opts.maxY) || 0, ...points.map(p=>p.value), 1);
+    const graphW = width - padX * 2;
+    const graphH = height - padY * 2;
+    const gap = 10;
+    const slotW = graphW / Math.max(points.length, 1);
+    const barW = Math.max(14, slotW - gap);
+    const bars = points.map((p, idx)=>{
+      const x = padX + idx * slotW + (slotW - barW) / 2;
+      const h = (p.value / max) * graphH;
+      const y = padY + graphH - h;
+      const valueText = opts.showValues ? `<text class="ss-chart-value" x="${x + barW / 2}" y="${Math.max(12, y - 6)}" text-anchor="middle">${p.value}</text>` : '';
+      const label = `<text class="ss-chart-label" x="${x + barW / 2}" y="${height - 6}" text-anchor="middle">${escapeChartText(p.label)}</text>`;
+      return `<rect class="ss-chart-bar" x="${x}" y="${y}" width="${barW}" height="${Math.max(1, h)}" rx="4" fill="${colors[idx]}"></rect>${valueText}${label}`;
+    }).join('');
+    const yTicks = 4;
+    const grid = Array.from({length: yTicks + 1}, (_, i)=>{
+      const y = padY + (graphH / yTicks) * i;
+      const val = Math.round((max - ((max / yTicks) * i)) * 10) / 10;
+      return `<line class="ss-chart-gridline" x1="${padX}" y1="${y}" x2="${width - padX}" y2="${y}"></line><text class="ss-chart-label" x="${padX - 8}" y="${y + 3}" text-anchor="end">${val}</text>`;
+    }).join('');
+    return `<svg class="ss-chart-svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="Bar chart"><g>${grid}<line class="ss-chart-axis" x1="${padX}" y1="${height - padY}" x2="${width - padX}" y2="${height - padY}"></line>${bars}</g></svg>`;
+  };
+
+  const renderHorizontalBars = (points, colors, opts)=>{
+    const max = Math.max(Number(opts.maxY) || 0, ...points.map(p=>p.value), 1);
+    return `<div class="ss-chart-bars-h">${
+      points.map((p, idx)=>{
+        const pct = Math.max(0, Math.min(100, (p.value / max) * 100));
+        const valueText = opts.showValues ? `<strong>${p.value}</strong>` : '';
+        return `<div class="ss-chart-bar-h-row"><span class="ss-help">${escapeChartText(p.label)}</span><div class="ss-chart-bar-h-track"><div class="ss-chart-bar-h-fill" style="width:${pct}%;background:${colors[idx]}"></div></div><span class="ss-help">${valueText}</span></div>`;
+      }).join('')
+    }</div>`;
+  };
+
+  const renderPieChart = (points, colors, opts)=>{
+    const total = points.reduce((sum, p)=>sum + p.value, 0);
+    let offset = 0;
+    const stops = points.map((p, idx)=>{
+      const pct = total > 0 ? (p.value / total) * 100 : 0;
+      const start = offset;
+      offset += pct;
+      return `${colors[idx]} ${start}% ${offset}%`;
+    }).join(', ');
+    const centerPct = total > 0 ? Math.round(points[0].value / total * 100) : 0;
+    const center = opts.showPercent
+      ? `<div class="ss-chart-pie-center"><div><strong>${centerPct}%</strong><span>${escapeChartText(points[0].label)}</span></div></div>`
+      : `<div class="ss-chart-pie-center"><div><strong>${total}</strong><span>Total</span></div></div>`;
+    return `<div class="ss-chart-pie" style="background:conic-gradient(${stops})">${center}</div>`;
+  };
+
+  const renderSingleChart = (wrap)=>{
+    if(!wrap) return;
+    const type = (wrap.getAttribute('data-ss-chart') || 'bar').toLowerCase();
+    const points = parseChartPoints(wrap.getAttribute('data-ss-values'));
+    const colors = getChartColors(wrap.getAttribute('data-ss-colors'), points.length);
+    const opts = {
+      orientation: (wrap.getAttribute('data-ss-orientation') || 'vertical').toLowerCase(),
+      showLegend: parseChartBool(wrap.getAttribute('data-ss-show-legend'), true),
+      showValues: parseChartBool(wrap.getAttribute('data-ss-show-values'), false),
+      showPercent: parseChartBool(wrap.getAttribute('data-ss-show-percent'), type === 'pie'),
+      maxY: Number(wrap.getAttribute('data-ss-y-max'))
+    };
+    let chartHtml = '';
+    if(type === 'line') chartHtml = renderLineChartSvg(points, colors, opts);
+    if(type === 'bar'){
+      chartHtml = opts.orientation === 'horizontal'
+        ? renderHorizontalBars(points, colors, opts)
+        : renderVerticalBarChartSvg(points, colors, opts);
+    }
+    if(type === 'pie') chartHtml = renderPieChart(points, colors, opts);
+    wrap.innerHTML = `<div class="ss-chart-wrap"><div class="ss-chart-stage">${chartHtml}</div>${renderChartLegend(points, colors, opts)}</div>`;
+  };
+
+  const renderSingleGauge = (wrap)=>{
+    if(!wrap) return;
+    const value = Math.max(0, Math.min(100, Number(wrap.getAttribute('data-ss-value') || 0)));
+    const min = Number(wrap.getAttribute('data-ss-min') || 0);
+    const max = Number(wrap.getAttribute('data-ss-max') || 100);
+    const label = wrap.getAttribute('data-ss-label') || 'Gauge';
+    const color = wrap.getAttribute('data-ss-color') || 'var(--ss-green)';
+    const text = wrap.getAttribute('data-ss-text') || `${value}%`;
+    const angle = Math.max(0, Math.min(360, (value / 100) * 360));
+    wrap.innerHTML =
+      `<div class="ss-gauge-ring" style="background:conic-gradient(${color} ${angle}deg, var(--ss-surface3) 0deg)"><div class="ss-gauge-content"><div class="ss-gauge-value">${escapeChartText(text)}</div><div class="ss-gauge-label">${escapeChartText(label)}</div></div></div><div class="ss-gauge-meta">${min} - ${max}</div>`;
+  };
+
+  const initCharts = ()=>{
+    document.querySelectorAll('[data-ss-chart]').forEach(renderSingleChart);
+    document.querySelectorAll('[data-ss-gauge]').forEach(renderSingleGauge);
+  };
+
   const dataTableState = new WeakMap();
   const isTruthyAttr = (value)=>['1','true','yes','on'].includes(String(value || '').trim().toLowerCase());
   const isFalsyAttr = (value)=>['0','false','no','off'].includes(String(value || '').trim().toLowerCase());
@@ -433,9 +620,35 @@
     }
   };
 
+  const getDataTableFilteredRows = (wrap, state)=>{
+    const table = wrap?.querySelector('table');
+    if(!table) return [];
+    const tbody = table.querySelector('tbody');
+    if(!tbody) return [];
+    if(!state || state.mode === 'server'){
+      return Array.from(tbody.querySelectorAll('tr'));
+    }
+    return state.rows.filter(row=>row.textContent.toLowerCase().includes(state.query));
+  };
+
+  const getDataTableSelectAllRows = (wrap, state)=>{
+    const filteredRows = getDataTableFilteredRows(wrap, state);
+    return filteredRows.filter(row=>row.querySelector('[data-ss-row-select]'));
+  };
+
+  const setDataTableSelectAllRowsChecked = (wrap, checked)=>{
+    const state = dataTableState.get(wrap);
+    const targetRows = getDataTableSelectAllRows(wrap, state);
+    targetRows.forEach(row=>{
+      const cb = row.querySelector('[data-ss-row-select]');
+      if(cb) cb.checked = checked;
+    });
+  };
+
   const updateDataTableBulkUi = (wrap)=>{
     const table = wrap?.querySelector('table');
     if(!table) return;
+    const state = dataTableState.get(wrap);
     const rowChecks = Array.from(table.querySelectorAll('[data-ss-row-select]'));
     const selected = rowChecks.filter(cb=>cb.checked);
     const selectedCount = selected.length;
@@ -443,14 +656,19 @@
     const applyBtn = wrap.querySelector('[data-ss-bulk-apply]');
     const actionEl = wrap.querySelector('[data-ss-bulk-action]');
     const selectAll = table.querySelector('[data-ss-select-all]');
+    const selectAllRows = getDataTableSelectAllRows(wrap, state);
+    const selectAllChecks = selectAllRows
+      .map(row=>row.querySelector('[data-ss-row-select]'))
+      .filter(Boolean);
+    const selectAllSelectedCount = selectAllChecks.filter(cb=>cb.checked).length;
     if(countEl) countEl.textContent = `${selectedCount} selected`;
     if(applyBtn){
       const action = actionEl ? actionEl.value : '';
       applyBtn.disabled = selectedCount < 1 || !action;
     }
     if(selectAll){
-      selectAll.checked = selectedCount > 0 && selectedCount === rowChecks.length;
-      selectAll.indeterminate = selectedCount > 0 && selectedCount < rowChecks.length;
+      selectAll.checked = selectAllChecks.length > 0 && selectAllSelectedCount === selectAllChecks.length;
+      selectAll.indeterminate = selectAllSelectedCount > 0 && selectAllSelectedCount < selectAllChecks.length;
     }
   };
 
@@ -899,10 +1117,8 @@
 
     const selectAll = e.target.closest('[data-ss-select-all]');
     if(selectAll){
-      const table = selectAll.closest('table');
-      if(table){
-        table.querySelectorAll('[data-ss-row-select]').forEach(cb=>{ cb.checked = selectAll.checked; });
-      }
+      const wrap = selectAll.closest('[data-ss-data-table]');
+      if(wrap) setDataTableSelectAllRowsChecked(wrap, selectAll.checked);
     }
 
     const bulkApply = e.target.closest('[data-ss-bulk-apply]');
@@ -1002,11 +1218,8 @@
       }
     }
     if(target && target.matches('[data-ss-select-all]')){
-      const table = target.closest('table');
-      if(table){
-        table.querySelectorAll('[data-ss-row-select]').forEach(cb=>{ cb.checked = target.checked; });
-      }
       const wrap = target.closest('[data-ss-data-table]');
+      if(wrap) setDataTableSelectAllRowsChecked(wrap, target.checked);
       if(wrap) updateDataTableBulkUi(wrap);
     }
     if(target && target.matches('[data-ss-row-select],[data-ss-bulk-action]')){
@@ -1131,6 +1344,7 @@
   initAccordions();
   initTransferLists();
   initAllComboboxes();
+  initCharts();
   initAllDataTables();
   initStandardPagination();
   initAllSteppers();
@@ -1341,6 +1555,48 @@
     return Array.from(selected.options).map(o=>o.value);
   };
 
+  window.SSUI.renderCharts = function(scope){
+    const root = scope && scope.querySelectorAll ? scope : document;
+    root.querySelectorAll('[data-ss-chart]').forEach(renderSingleChart);
+    root.querySelectorAll('[data-ss-gauge]').forEach(renderSingleGauge);
+  };
+
+  window.SSUI.updateChart = function(chartEl, options){
+    if(!chartEl) return false;
+    const opts = options || {};
+    if(Object.prototype.hasOwnProperty.call(opts, 'type')) chartEl.setAttribute('data-ss-chart', String(opts.type));
+    if(Object.prototype.hasOwnProperty.call(opts, 'values')){
+      const list = Array.isArray(opts.values)
+        ? opts.values.map(p=>`${p?.label ?? ''}:${p?.value ?? 0}`).join(',')
+        : String(opts.values || '');
+      chartEl.setAttribute('data-ss-values', list);
+    }
+    if(Object.prototype.hasOwnProperty.call(opts, 'colors')){
+      const colors = Array.isArray(opts.colors) ? opts.colors.join(',') : String(opts.colors || '');
+      chartEl.setAttribute('data-ss-colors', colors);
+    }
+    if(Object.prototype.hasOwnProperty.call(opts, 'orientation')) chartEl.setAttribute('data-ss-orientation', String(opts.orientation));
+    if(Object.prototype.hasOwnProperty.call(opts, 'showLegend')) chartEl.setAttribute('data-ss-show-legend', opts.showLegend ? 'true' : 'false');
+    if(Object.prototype.hasOwnProperty.call(opts, 'showValues')) chartEl.setAttribute('data-ss-show-values', opts.showValues ? 'true' : 'false');
+    if(Object.prototype.hasOwnProperty.call(opts, 'showPercent')) chartEl.setAttribute('data-ss-show-percent', opts.showPercent ? 'true' : 'false');
+    if(Object.prototype.hasOwnProperty.call(opts, 'maxY')) chartEl.setAttribute('data-ss-y-max', String(opts.maxY));
+    renderSingleChart(chartEl);
+    return true;
+  };
+
+  window.SSUI.updateGauge = function(gaugeEl, options){
+    if(!gaugeEl) return false;
+    const opts = options || {};
+    if(Object.prototype.hasOwnProperty.call(opts, 'value')) gaugeEl.setAttribute('data-ss-value', String(opts.value));
+    if(Object.prototype.hasOwnProperty.call(opts, 'label')) gaugeEl.setAttribute('data-ss-label', String(opts.label));
+    if(Object.prototype.hasOwnProperty.call(opts, 'color')) gaugeEl.setAttribute('data-ss-color', String(opts.color));
+    if(Object.prototype.hasOwnProperty.call(opts, 'text')) gaugeEl.setAttribute('data-ss-text', String(opts.text));
+    if(Object.prototype.hasOwnProperty.call(opts, 'min')) gaugeEl.setAttribute('data-ss-min', String(opts.min));
+    if(Object.prototype.hasOwnProperty.call(opts, 'max')) gaugeEl.setAttribute('data-ss-max', String(opts.max));
+    renderSingleGauge(gaugeEl);
+    return true;
+  };
+
   window.SSUI.setTransferValues = function(container, values){
     if(!container) return;
     const source = container.querySelector('[data-ss-transfer-source]');
@@ -1383,6 +1639,14 @@
   }
 
   function validateField(field){
+    if(field.disabled){
+      field.classList.remove('ss-error');
+      field.setAttribute('aria-invalid', 'false');
+      const wrap = field.closest('.ss-field');
+      const errEl = wrap ? wrap.querySelector('.ss-field-error') : null;
+      if(errEl) errEl.textContent = '';
+      return true;
+    }
     const required = field.hasAttribute('data-ss-required') || field.required;
     const rule = resolveValidationRule(field);
     const isCheck = field.matches('input[type="checkbox"],input[type="radio"]');
@@ -1562,6 +1826,9 @@
     if(!form || !(form instanceof HTMLFormElement)) return;
     if(e.defaultPrevented) return;
     if(form.matches('[data-ss-form]')) return;
+    form.querySelectorAll('[data-ss-transfer-selected]').forEach(select=>{
+      Array.from(select.options).forEach(opt=>{ opt.selected = true; });
+    });
     if(form.getAttribute('data-ss-no-submit-loading') === 'true') return;
     const submitter = e.submitter instanceof HTMLElement
       ? e.submitter

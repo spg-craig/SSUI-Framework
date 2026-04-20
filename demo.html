@@ -58,6 +58,8 @@
   <button class="ss-btn primary" type="button" data-ss-modal-open="ss-demo-modal" data-ss-modal-template="ss-demo-modal-template">Open Demo Modal</button>
   <button class="ss-btn ghost" type="button" id="ss-wait-btn">Secondary Action</button>
   <button class="ss-btn ghost" type="button" id="ss-confirm-demo-btn">Open Confirm</button>
+  <button class="ss-btn ghost" type="button" id="ss-width-default-btn">Default Width</button>
+  <button class="ss-btn ghost" type="button" id="ss-width-wide-btn">Extra Wide</button>
   <label class="ss-check-inline"><input type="checkbox" id="ss-fixed-header-toggle" /> Fixed Header</label>
   <button class="ss-btn ghost" type="button" id="ss-theme-toggle">Switch to Light</button>
 </div>
@@ -573,6 +575,90 @@
 <section class="ss-section">
   <div class="ss-container ss-stack" style="--ss-stack-gap:1rem">
     <div class="ss-section-title">
+      <h2>Phase 3.1: Charts + Gauges</h2>
+      <p>Configurable data visuals with orientation, legends, percentages, values, and color palettes.</p>
+    </div>
+    <div class="ss-surface-card ss-stack" style="--ss-stack-gap:.9rem">
+      <div class="ss-cluster">
+        <label class="ss-check-inline">Bar Orientation
+          <select class="ss-select" id="ss-chart-orientation" style="max-width:170px">
+            <option value="vertical" selected>Vertical</option>
+            <option value="horizontal">Horizontal</option>
+          </select>
+        </label>
+        <label class="ss-check-inline">Palette
+          <select class="ss-select" id="ss-chart-palette" style="max-width:180px">
+            <option value="default" selected>Default</option>
+            <option value="cool">Cool Blue</option>
+            <option value="warm">Warm</option>
+          </select>
+        </label>
+        <label class="ss-check-inline"><input type="checkbox" id="ss-chart-legend" checked /> Legend</label>
+        <label class="ss-check-inline"><input type="checkbox" id="ss-chart-values" /> Values</label>
+        <label class="ss-check-inline"><input type="checkbox" id="ss-chart-percent" checked /> Percentages</label>
+      </div>
+
+      <div class="ss-chart-grid">
+        <div class="ss-surface-card">
+          <h3>Bar Chart</h3>
+          <div
+            id="ss-chart-bar"
+            data-ss-chart="bar"
+            data-ss-values="HubSpot:74,ConnectWise:62,Salesforce:33,Dynamics:21"
+            data-ss-colors="#3bba7e,#2e8ce6,#f59e0b,#a78bfa"
+            data-ss-orientation="vertical"
+            data-ss-show-legend="true"
+            data-ss-show-values="false"
+            data-ss-show-percent="false"></div>
+        </div>
+        <div class="ss-surface-card">
+          <h3>Line Chart</h3>
+          <div
+            id="ss-chart-line"
+            data-ss-chart="line"
+            data-ss-values="Jan:12,Feb:19,Mar:25,Apr:22,May:30,Jun:34"
+            data-ss-colors="#2e8ce6,#3bba7e,#f59e0b,#a78bfa,#fb7185,#22c55e"
+            data-ss-show-legend="true"
+            data-ss-show-values="false"
+            data-ss-show-percent="false"></div>
+        </div>
+      </div>
+
+      <div class="ss-chart-grid">
+        <div class="ss-surface-card">
+          <h3>Pie Chart</h3>
+          <div
+            id="ss-chart-pie"
+            data-ss-chart="pie"
+            data-ss-values="Active:58,Review:27,Blocked:15"
+            data-ss-colors="#3bba7e,#f59e0b,#f53003"
+            data-ss-show-legend="true"
+            data-ss-show-values="true"
+            data-ss-show-percent="true"></div>
+        </div>
+        <div class="ss-surface-card ss-stack" style="--ss-stack-gap:.75rem">
+          <h3>Gauge</h3>
+          <div class="ss-gauge-row">
+            <div class="ss-surface-card ss-gauge">
+              <div id="ss-gauge-health" data-ss-gauge data-ss-value="72" data-ss-label="Sync Health" data-ss-color="var(--ss-green)" data-ss-text="72%"></div>
+            </div>
+            <div class="ss-surface-card ss-gauge">
+              <div id="ss-gauge-coverage" data-ss-gauge data-ss-value="46" data-ss-label="Field Coverage" data-ss-color="var(--ss-cw)" data-ss-text="46%"></div>
+            </div>
+          </div>
+          <label class="ss-field">
+            <span class="ss-label">Gauge Value</span>
+            <input class="ss-input" id="ss-gauge-slider" type="range" min="0" max="100" value="72" />
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ss-section">
+  <div class="ss-container ss-stack" style="--ss-stack-gap:1rem">
+    <div class="ss-section-title">
       <h2>Phase 4: Data Table</h2>
       <p>Search, column visibility, bulk select, and pagination.</p>
     </div>
@@ -808,9 +894,23 @@
   const skeletonToggleBtn = document.getElementById('ss-skeleton-toggle-btn');
   const transferWrap = document.getElementById('ss-sync-transfer');
   const headerEl = document.querySelector('.ss-header');
+  const uiRoot = document.querySelector('.ss-ui');
   const fixedHeaderToggle = document.getElementById('ss-fixed-header-toggle');
   const themeToggle = document.getElementById('ss-theme-toggle');
   const confirmDemoBtn = document.getElementById('ss-confirm-demo-btn');
+  const widthDefaultBtn = document.getElementById('ss-width-default-btn');
+  const widthWideBtn = document.getElementById('ss-width-wide-btn');
+  const chartBarEl = document.getElementById('ss-chart-bar');
+  const chartLineEl = document.getElementById('ss-chart-line');
+  const chartPieEl = document.getElementById('ss-chart-pie');
+  const chartOrientation = document.getElementById('ss-chart-orientation');
+  const chartPalette = document.getElementById('ss-chart-palette');
+  const chartLegend = document.getElementById('ss-chart-legend');
+  const chartValues = document.getElementById('ss-chart-values');
+  const chartPercent = document.getElementById('ss-chart-percent');
+  const gaugeHealthEl = document.getElementById('ss-gauge-health');
+  const gaugeCoverageEl = document.getElementById('ss-gauge-coverage');
+  const gaugeSlider = document.getElementById('ss-gauge-slider');
   if(btn){
     btn.addEventListener('click', ()=>{
       window.SSUI.setButtonLoading(btn, true);
@@ -897,6 +997,19 @@
     });
   }
 
+  if(uiRoot && widthDefaultBtn && widthWideBtn){
+    const setLayoutMode = (isWide)=>{
+      uiRoot.classList.toggle('ss-layout-xwide', !!isWide);
+      widthWideBtn.classList.toggle('primary', !!isWide);
+      widthWideBtn.classList.toggle('ghost', !isWide);
+      widthDefaultBtn.classList.toggle('primary', !isWide);
+      widthDefaultBtn.classList.toggle('ghost', !!isWide);
+    };
+    setLayoutMode(false);
+    widthDefaultBtn.addEventListener('click', ()=>setLayoutMode(false));
+    widthWideBtn.addEventListener('click', ()=>setLayoutMode(true));
+  }
+
   if(confirmDemoBtn){
     confirmDemoBtn.addEventListener('click', async ()=>{
       const accepted = await window.SSUI.confirm({
@@ -912,6 +1025,38 @@
         title: accepted ? 'Confirmed' : 'Cancelled',
         text: accepted ? 'User accepted the action.' : 'User denied the action.'
       });
+    });
+  }
+
+  if(chartBarEl && chartLineEl && chartPieEl){
+    const chartPalettes = {
+      default: ['#3bba7e','#2e8ce6','#f59e0b','#a78bfa','#fb7185','#22c55e'],
+      cool: ['#2e8ce6','#06b6d4','#3b82f6','#6366f1','#22c55e','#14b8a6'],
+      warm: ['#f59e0b','#f97316','#ef4444','#fb7185','#eab308','#84cc16']
+    };
+    const applyChartSettings = ()=>{
+      const paletteKey = chartPalette?.value || 'default';
+      const palette = chartPalettes[paletteKey] || chartPalettes.default;
+      const showLegend = !!chartLegend?.checked;
+      const showValues = !!chartValues?.checked;
+      const showPercent = !!chartPercent?.checked;
+      const orientation = chartOrientation?.value || 'vertical';
+      window.SSUI.updateChart(chartBarEl, {orientation, colors: palette, showLegend, showValues, showPercent});
+      window.SSUI.updateChart(chartLineEl, {colors: palette, showLegend, showValues, showPercent});
+      window.SSUI.updateChart(chartPieEl, {colors: palette, showLegend, showValues, showPercent});
+    };
+    [chartOrientation, chartPalette, chartLegend, chartValues, chartPercent].forEach(control=>{
+      control?.addEventListener('change', applyChartSettings);
+    });
+    applyChartSettings();
+  }
+
+  if(gaugeHealthEl && gaugeCoverageEl && gaugeSlider){
+    gaugeSlider.addEventListener('input', ()=>{
+      const value = Number(gaugeSlider.value || 0);
+      window.SSUI.updateGauge(gaugeHealthEl, {value, text: value + '%'});
+      const companion = Math.max(0, Math.min(100, Math.round(value * 0.78)));
+      window.SSUI.updateGauge(gaugeCoverageEl, {value: companion, text: companion + '%'});
     });
   }
 
