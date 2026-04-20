@@ -52,9 +52,20 @@ body{margin:0}
 .ss-page-link.is-disabled{opacity:.5;pointer-events:none}
 .ss-page-ellipsis{padding:.35rem .5rem;color:var(--ss-text-dim)}
 .ss-status-pill{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .6rem;border-radius:999px;font-size:.75rem;font-weight:600;border:1px solid transparent}
-.ss-status-pill.is-ok{color:var(--ss-green);background:rgba(59,186,126,.12);border-color:rgba(59,186,126,.35)}
-.ss-status-pill.is-warn{color:#f59e0b;background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.4)}
-.ss-status-pill.is-danger{color:#f53003;background:rgba(245,48,3,.12);border-color:rgba(245,48,3,.35)}
+.ss-status-pill.is-ok,.ss-status-pill.is-success{color:var(--ss-success);background:var(--ss-success-bg);border-color:var(--ss-success-border)}
+.ss-status-pill.is-warn,.ss-status-pill.is-recommended{color:var(--ss-warn);background:var(--ss-warn-bg);border-color:var(--ss-warn-border)}
+.ss-status-pill.is-danger,.ss-status-pill.is-critical{color:var(--ss-critical);background:var(--ss-critical-bg);border-color:var(--ss-critical-border)}
+.ss-status-pill.is-info,.ss-status-pill.is-advisory{color:var(--ss-advisory);background:var(--ss-advisory-bg);border-color:var(--ss-advisory-border)}
+
+/* Severity pill — semantic variant of status-pill used for audit results.
+   Adds a leading dot indicator. Modifier classes mirror severity tokens. */
+.ss-severity-pill{display:inline-flex;align-items:center;gap:.4rem;padding:.22rem .65rem;border-radius:999px;font-size:.72rem;font-weight:700;letter-spacing:.02em;border:1px solid transparent;text-transform:capitalize}
+.ss-severity-pill::before{content:'';width:.45rem;height:.45rem;border-radius:999px;background:currentColor;flex:0 0 auto}
+.ss-severity-pill.is-critical{color:var(--ss-critical);background:var(--ss-critical-bg);border-color:var(--ss-critical-border)}
+.ss-severity-pill.is-recommended{color:var(--ss-warn);background:var(--ss-warn-bg);border-color:var(--ss-warn-border)}
+.ss-severity-pill.is-advisory{color:var(--ss-advisory);background:var(--ss-advisory-bg);border-color:var(--ss-advisory-border)}
+.ss-severity-pill.is-info{color:var(--ss-info);background:var(--ss-info-bg);border-color:var(--ss-info-border)}
+.ss-severity-pill.is-success{color:var(--ss-success);background:var(--ss-success-bg);border-color:var(--ss-success-border)}
 .ss-color-picker{width:36px;height:36px;border-radius:8px;border:1px solid var(--ss-border);padding:0;background:transparent}
 .ss-color-swatch{width:18px;height:18px;border-radius:6px;border:1px solid rgba(15,30,48,.2);display:inline-block}
 .ss-check-inline{display:inline-flex;align-items:center;gap:10px;white-space:nowrap}
@@ -222,6 +233,9 @@ body{margin:0}
 .ss-form-head h3{font-size:1.1rem;font-weight:800;margin-bottom:.25rem}
 .ss-form-head p{color:var(--ss-text-dim);font-size:.85rem;line-height:1.5;margin-bottom:1rem}
 .ss-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+/* Horizontal row of fields that auto-wraps; use inside modal bodies for compact layouts. */
+.ss-form-row{display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-end}
+.ss-form-row > .ss-field{flex:1 1 220px;min-width:0}
 .ss-field{display:flex;flex-direction:column;gap:.35rem}
 .ss-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ss-text-dim)}
 .ss-label .ss-required{color:var(--ss-hs);margin-left:.25rem}
@@ -330,6 +344,11 @@ body{margin:0}
 .ss-modal-close{border:1px solid var(--ss-border);background:var(--ss-surface2);color:var(--ss-text);border-radius:10px;width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer}
 .ss-modal-close:hover{border-color:var(--ss-border-light);background:var(--ss-surface3)}
 .ss-modal-body{display:grid;gap:1.2rem;max-height:calc(88vh - 70px);overflow:auto;padding:1rem 1.4rem 1.4rem}
+/* Sticky footer slot for modal action buttons. Pair with ss-modal-head.
+   Ends content with a right-aligned action group by default; add
+   `ss-modal-footer--between` to space-between for destructive-left / confirm-right. */
+.ss-modal-footer{position:sticky;bottom:0;display:flex;justify-content:flex-end;align-items:center;gap:.6rem;padding:.85rem 1.4rem;background:var(--ss-surface);border-top:1px solid var(--ss-border);z-index:2}
+.ss-modal-footer.ss-modal-footer--between{justify-content:space-between}
 
 /* Layout Primitives */
 .ss-container{max-width:var(--ss-layout-max);margin:0 auto;padding:0 2rem}

@@ -36,4 +36,27 @@
 
   /* Shadows */
   --ss-shadow-1:0 6px 24px rgba(0,0,0,.25);
+
+  /* Severity palette
+     Used by .ss-status-pill.is-{severity}, .ss-severity-pill, .ss-alert.is-{severity}.
+     Consumers should reference these tokens instead of hardcoding rgba(...) tuples. */
+  --ss-critical:#ef4444;
+  --ss-critical-bg:rgba(239,68,68,.08);
+  --ss-critical-border:rgba(239,68,68,.35);
+
+  --ss-warn:#f59e0b;
+  --ss-warn-bg:rgba(245,158,11,.12);
+  --ss-warn-border:rgba(245,158,11,.4);
+
+  --ss-advisory:#6366f1;
+  --ss-advisory-bg:rgba(99,102,241,.1);
+  --ss-advisory-border:rgba(99,102,241,.35);
+
+  --ss-info:#2E8CE6;
+  --ss-info-bg:rgba(46,140,230,.1);
+  --ss-info-border:rgba(46,140,230,.35);
+
+  --ss-success:var(--ss-green);
+  --ss-success-bg:var(--ss-green-dim);
+  --ss-success-border:rgba(59,186,126,.35);
 }

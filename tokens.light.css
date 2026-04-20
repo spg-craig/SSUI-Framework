@@ -26,4 +26,25 @@
   --ss-r-10:10px;
   --ss-r-12:12px;
   --ss-shadow-1:0 10px 24px rgba(20,40,70,.12);
+
+  /* Severity palette — slightly stronger fills for legibility on light bg. */
+  --ss-critical:#dc2626;
+  --ss-critical-bg:rgba(220,38,38,.08);
+  --ss-critical-border:rgba(220,38,38,.35);
+
+  --ss-warn:#d97706;
+  --ss-warn-bg:rgba(217,119,6,.12);
+  --ss-warn-border:rgba(217,119,6,.4);
+
+  --ss-advisory:#4f46e5;
+  --ss-advisory-bg:rgba(79,70,229,.1);
+  --ss-advisory-border:rgba(79,70,229,.35);
+
+  --ss-info:#2E8CE6;
+  --ss-info-bg:rgba(46,140,230,.1);
+  --ss-info-border:rgba(46,140,230,.35);
+
+  --ss-success:var(--ss-green);
+  --ss-success-bg:var(--ss-green-dim);
+  --ss-success-border:rgba(59,186,126,.35);
 }
