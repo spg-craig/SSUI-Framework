@@ -210,9 +210,18 @@ body{margin:0}
 .ss-table-fixed{width:100%;border-collapse:collapse}
 .ss-table-fixed thead th{position:sticky;top:0;z-index:1;background:var(--ss-surface2)}
 .ss-table-fixed th[data-ss-sort]{cursor:pointer;user-select:none}
-.ss-table-fixed th[data-ss-sort]::after{content:'↕';margin-left:.35rem;font-size:.7rem;opacity:.5}
-.ss-table-fixed th[data-ss-sort].is-asc::after{content:'↑';opacity:.9}
-.ss-table-fixed th[data-ss-sort].is-desc::after{content:'↓';opacity:.9}
+.ss-table-fixed th[data-ss-sort]::after{content:'↕';margin-left:.4rem;font-size:.95rem;line-height:1;opacity:.55;vertical-align:middle}
+.ss-table-fixed th[data-ss-sort].is-asc::after{content:'↑';opacity:.95}
+.ss-table-fixed th[data-ss-sort].is-desc::after{content:'↓';opacity:.95}
+
+/* Inline caret/chevron utility — use on any span rendering a Unicode
+   ▸/▾/▼/▶/↓/↑/⌄/⋮ glyph so icon size is consistent across the app.
+   Default is readable without being loud; use `.ss-caret.is-lg` when
+   the caret is the only affordance (e.g. dropdown triggers). */
+.ss-caret{font-size:.95rem;line-height:1;display:inline-block;color:var(--ss-text-dim);opacity:.75;transition:transform .15s ease}
+.ss-caret.is-lg{font-size:1.05rem;opacity:.85}
+.ss-caret.is-open{transform:rotate(90deg)}
+.ss-caret.is-open-down{transform:rotate(180deg)}
 .ss-table-fixed th[data-ss-sort]:focus-visible{outline:2px solid var(--ss-green);outline-offset:-2px}
 .ss-table-fixed tr[data-ss-row]{cursor:pointer}
 .ss-table-fixed tr[data-ss-row]:focus-visible{outline:2px solid var(--ss-green);outline-offset:-2px}
